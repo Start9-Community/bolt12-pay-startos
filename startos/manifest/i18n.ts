@@ -22,13 +22,13 @@ export const long = {
 
 export const depLndDescription = {
   en_US:
-    'Used to create and pay BOLT12 offers via LNDK. LND must have onion-message support enabled (protocol.custom-message=513, protocol.custom-nodeann=39, protocol.custom-init=39).',
+    'Used to create and pay BOLT12 offers via LNDK. Requires LND 0.21 or newer, which supports the onion messages BOLT12 needs natively — no lnd.conf changes required.',
   es_ES:
-    'Se utiliza para crear y pagar ofertas BOLT12 mediante LNDK. LND debe tener habilitado el soporte de mensajes onion (protocol.custom-message=513, protocol.custom-nodeann=39, protocol.custom-init=39).',
+    'Se utiliza para crear y pagar ofertas BOLT12 mediante LNDK. Requiere LND 0.21 o posterior, que admite de forma nativa los mensajes onion que BOLT12 necesita; no requiere cambios en lnd.conf.',
   de_DE:
-    'Wird verwendet, um BOLT12-Angebote über LNDK zu erstellen und zu bezahlen. LND muss die Onion-Message-Unterstützung aktiviert haben (protocol.custom-message=513, protocol.custom-nodeann=39, protocol.custom-init=39).',
+    'Wird verwendet, um BOLT12-Angebote über LNDK zu erstellen und zu bezahlen. Erfordert LND 0.21 oder neuer, das die von BOLT12 benötigten Onion-Nachrichten nativ unterstützt – keine Änderungen an der lnd.conf erforderlich.',
   pl_PL:
-    'Używany do tworzenia i opłacania ofert BOLT12 za pośrednictwem LNDK. LND musi mieć włączoną obsługę wiadomości onion (protocol.custom-message=513, protocol.custom-nodeann=39, protocol.custom-init=39).',
+    'Używany do tworzenia i opłacania ofert BOLT12 za pośrednictwem LNDK. Wymaga LND 0.21 lub nowszego, które natywnie obsługuje wiadomości onion potrzebne dla BOLT12 — bez zmian w lnd.conf.',
   fr_FR:
-    'Utilisé pour créer et payer des offres BOLT12 via LNDK. LND doit avoir la prise en charge des messages onion activée (protocol.custom-message=513, protocol.custom-nodeann=39, protocol.custom-init=39).',
+    'Utilisé pour créer et payer des offres BOLT12 via LNDK. Nécessite LND 0.21 ou ultérieur, qui prend en charge nativement les messages onion dont BOLT12 a besoin — aucune modification de lnd.conf requise.',
 }
