@@ -31,12 +31,12 @@
 
 ## Image and Container Runtime
 
-| Property | Value |
-|----------|-------|
-| Image | `main` — built from [`Dockerfile`](./Dockerfile) (upstream `app/` via the `upstream/` submodule + LNDK runtime) |
-| Base | `python:3.11-slim` + LNDK runtime from `alex71btc/lndk` |
-| Architectures | x86_64, aarch64 |
-| Entrypoint | `/usr/local/bin/docker_entrypoint.sh` → `start.sh` |
+| Property      | Value                                                                                                           |
+| ------------- | --------------------------------------------------------------------------------------------------------------- |
+| Image         | `main` — built from [`Dockerfile`](./Dockerfile) (upstream `app/` via the `upstream/` submodule + LNDK runtime) |
+| Base          | `python:3.11-slim` + LNDK runtime from `alex71btc/lndk`                                                         |
+| Architectures | x86_64, aarch64                                                                                                 |
+| Entrypoint    | `/usr/local/bin/docker_entrypoint.sh` → `start.sh`                                                              |
 
 The container runs two processes from [`assets/start.sh`](./assets/start.sh):
 
@@ -47,9 +47,9 @@ The container runs two processes from [`assets/start.sh`](./assets/start.sh):
 
 ## Volume and Data Layout
 
-| Volume | Mount Point | Purpose |
-|--------|-------------|---------|
-| `main` | `/data` | App config, secrets, and LNDK data dir (`/data/lndk`) |
+| Volume | Mount Point | Purpose                                               |
+| ------ | ----------- | ----------------------------------------------------- |
+| `main` | `/data`     | App config, secrets, and LNDK data dir (`/data/lndk`) |
 
 **Dependency mounts:**
 
@@ -59,9 +59,9 @@ The container runs two processes from [`assets/start.sh`](./assets/start.sh):
 
 ## Network Access and Interfaces
 
-| Interface | Port | Protocol | Purpose |
-|-----------|------|----------|---------|
-| Web UI | 8081 | HTTP | BOLT12 Pay web interface |
+| Interface | Port | Protocol | Purpose                  |
+| --------- | ---- | -------- | ------------------------ |
+| Web UI    | 8081 | HTTP     | BOLT12 Pay web interface |
 
 **Access methods (StartOS 0.4.0):**
 
@@ -78,12 +78,12 @@ For Lightning Address / LNURL / `.well-known` endpoints to resolve publicly, exp
 
 ### Set Primary URL
 
-| Property | Value |
-|----------|-------|
-| ID | `set-primary-url` |
-| Visibility | Enabled |
-| Availability | Any status |
-| Purpose | Choose which non-local URL to advertise as the LNURL / Lightning Address base |
+| Property     | Value                                                                         |
+| ------------ | ----------------------------------------------------------------------------- |
+| ID           | `set-primary-url`                                                             |
+| Visibility   | Enabled                                                                       |
+| Availability | Any status                                                                    |
+| Purpose      | Choose which non-local URL to advertise as the LNURL / Lightning Address base |
 
 Pick one of the service's non-local URLs (use a **clearnet or custom-domain** URL — Tor and `.local` won't resolve for external senders). The selection is stored on the `startos` volume and injected on next start as the app's native `LNURL_BASE_URL`, `LNURL_BASE_DOMAIN`, `PUBLIC_LNURL_ADDRESS`, and `PUBLIC_BIP353_ADDRESS` env vars. These are **defaults** — the in-app admin settings still override them. If a previously-selected URL is later removed, StartOS posts a task to pick a new one.
 
@@ -93,15 +93,15 @@ Pick one of the service's non-local URLs (use a **clearnet or custom-domain** UR
 
 ### LND (`lnd`)
 
-| Property | Value |
-|----------|-------|
-| **Required** | Yes |
-| **Health checks** | `lnd` must pass |
-| **Mounted volumes** | `lnd:main` at `/mnt/lnd` (read-only) — TLS cert and admin macaroon |
-| **Reached at** | `lnd.startos` (REST `:8080`, gRPC `:10009`) |
-| **Purpose** | Create and pay BOLT12 offers via LNDK |
+| Property            | Value                                                                                                                                                                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Required**        | Yes                                                                                                                                                                                                                                         |
+| **Health checks**   | `lnd` must pass                                                                                                                                                                                                                             |
+| **Mounted volumes** | `lnd:main` at `/mnt/lnd` (read-only) — TLS cert and admin macaroon                                                                                                                                                                          |
+| **Reached at**      | LND's REST (`:8080`) and gRPC (`:10009`) over the StartOS LXC bridge — resolved from LND's `control`/`grpc` hosts and injected into `start.sh` as `LND_REST_URL` / `LND_GRPC_ADDRESS` (the `lnd.startos` DNS name is gone in StartOS 0.4.0) |
+| **Purpose**         | Create and pay BOLT12 offers via LNDK                                                                                                                                                                                                       |
 
-**LND must have onion-message support enabled.** BOLT12 offers require `protocol.custom-message=513`, `protocol.custom-nodeann=39`, and `protocol.custom-init=39` in `lnd.conf`. BOLT12 Pay configures this automatically: on startup it posts a task against LND's hidden **Auto-Configure** action, which the user approves with one click — no manual `lnd.conf` editing. The task uses `input-not-matches`, so it clears once the settings are present and reappears if they are ever removed.
+**Requires LND 0.21 or newer.** BOLT12 offers need onion-message support, which LND advertises natively from 0.21 — no `lnd.conf` changes and no setup task. (Earlier releases required the `protocol.custom-*` entries, set via a one-click Auto-Configure task; that's obsolete now and the task has been removed.)
 
 See [instructions.md](./instructions.md) for the user-facing steps.
 
@@ -119,15 +119,15 @@ LND credentials are not backed up here; they live on the LND package and are re-
 
 ## Health Checks
 
-| Check | Display Name | Method | Messages |
-|-------|--------------|--------|----------|
-| Web UI | "Web UI" | Port 8081 listening | "BOLT12 Pay is ready" / "BOLT12 Pay web interface is not ready" |
+| Check  | Display Name | Method              | Messages                                                        |
+| ------ | ------------ | ------------------- | --------------------------------------------------------------- |
+| Web UI | "Web UI"     | Port 8081 listening | "BOLT12 Pay is ready" / "BOLT12 Pay web interface is not ready" |
 
 ---
 
 ## Limitations and Differences
 
-1. **LND onion messages** — BOLT12 offers require LND's `protocol.custom-*` settings; BOLT12 Pay enables them via a one-click **Auto-Configure** task on LND (no manual `lnd.conf` editing). Requires an LND package recent enough to expose the Auto-Configure action.
+1. **LND onion messages** — BOLT12 offers require onion-message support, which LND provides natively from 0.21; BOLT12 Pay requires LND `>=0.21.0-beta:0` and no longer configures anything on LND.
 2. **LNURL base URL** — seeded from the **Set Primary URL** action; the in-app admin settings can still override it. All other app configuration is done inside the web UI.
 3. **Mainnet only** — the LND macaroon path is pinned to `data/chain/bitcoin/mainnet`.
 
@@ -135,7 +135,7 @@ LND credentials are not backed up here; they live on the LND package and are re-
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for build instructions and development workflow.
+See [AGENTS.md](AGENTS.md) for repo conventions and the [StartOS packaging guide](https://docs.start9.com/packaging) for build instructions and development workflow.
 
 ---
 
@@ -152,12 +152,11 @@ volumes:
   startos: (StartOS metadata; not mounted into the container)
 dependency_mounts:
   lnd: /mnt/lnd (read-only)
+lnd_reached_at: LXC bridge (REST :8080, gRPC :10009), injected into start.sh as LND_REST_URL / LND_GRPC_ADDRESS
 ports:
   ui: 8081
 dependencies:
-  - lnd (required; onion messages enabled via a one-click task against lnd's hidden `autoconfig` action — writes protocol.custom-message=513/nodeann=39/init=39)
+  - lnd (required, >=0.21.0-beta:0; onion messages are native in LND 0.21 — nothing configured)
 actions:
   - set-primary-url
-tasks_posted:
-  - lnd/autoconfig (critical, input-not-matches: { onion-messages: true })
 ```
