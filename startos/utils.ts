@@ -68,7 +68,8 @@ export function bridgeAddress(
         const port =
           host?.bindings[opts.internalPort]?.net.assignedPort ??
           opts.fallbackPort
-        return port != null ? `${osIp}:${port}` : null
+        if (port == null) return null
+        return `${osIp}:${port}`
       },
     )
   }
@@ -83,10 +84,10 @@ export function bridgeAddress(
  * LND_REST_URL / LND_GRPC_ADDRESS. LND's `lnd.startos` DNS name is gone in 2.0;
  * its StartOS-issued TLS cert now covers the bridge address, so lndk and curl
  * still pin it. LND's REST/gRPC bindings appear only once its wallet macaroon
- * exists, so each address resolves null until the first unlock — a loopback
- * placeholder holds start.sh's retry loops harmless meanwhile, and the
- * `.const()` heals main onto the real address (one restart) when LND binds,
- * then stays stable across lock/unlock cycles.
+ * exists, so each address resolves null until the first unlock — the env var is
+ * omitted meanwhile (start.sh blocks on its own cert/macaroon wait and the
+ * health check stays red until LND is reachable), and the `.const()` heals main
+ * onto the real address (one restart) when LND binds.
  */
 export async function lndBridgeEnv(
   effects: T.Effects,
@@ -102,8 +103,8 @@ export async function lndBridgeEnv(
     internalPort: gRPCPort,
   }).const()
   return {
-    LND_REST_URL: `https://${rest ?? `127.0.0.1:${restPort}`}`,
-    LND_GRPC_ADDRESS: `https://${grpc ?? `127.0.0.1:${gRPCPort}`}`,
+    ...(rest && { LND_REST_URL: `https://${rest}` }),
+    ...(grpc && { LND_GRPC_ADDRESS: `https://${grpc}` }),
   }
 }
 
