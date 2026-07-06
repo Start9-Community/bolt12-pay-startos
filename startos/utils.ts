@@ -1,9 +1,9 @@
-import { T, utils } from '@start9labs/start-sdk'
+import { T } from '@start9labs/start-sdk'
 import {
   controlHostId,
   gRPCHostId,
-  gRPCInterfaceId,
-  lndconnectRestId,
+  gRPCPort,
+  restPort,
 } from 'lnd-startos/startos/interfaces'
 import { sdk } from './sdk'
 
@@ -28,61 +28,83 @@ export async function getNonLocalUrls(effects: T.Effects): Promise<string[]> {
 }
 
 /**
- * The IPv4 LXC-bridge hostname/port for an interface on an already-resolved
- * `FilledHost`. Pure — call INSIDE a `sdk.host` map fn so `.const()` narrows its
- * reactivity to just this address. `.startos` DNS is deprecated; containers
- * reach each other over the bridge. `ssl` picks the http vs https variant.
+ * Bridge address (`10.0.3.1:<assigned external port>`) of a dependency's
+ * binding, as a minimal reactive value. Chain `.const()` in main: the mapped
+ * string only changes when the address itself does, so main restarts exactly
+ * on dependency install/uninstall/port-change and never on dependency
+ * updates. Chain `.once()` in an action context. `fallbackPort` keeps the
+ * value non-null while the dependency is absent — sanctioned only for tor's
+ * allocator-guaranteed SOCKS 9050. Drop-in for the planned SDK
+ * `sdk.host.getBridgeAddress` helper.
  */
-const bridgeAddr = (
-  host: utils.FilledHost | null,
-  interfaceId: string,
-  ssl?: boolean,
-) => {
-  const iface =
-    host &&
-    Object.values(host.bindings)
-      .flatMap((b) => Object.values(b.interfaces))
-      .find((i) => i.id === interfaceId)
-  return iface
-    ? iface.addressInfo
-        .filter({
-          kind: 'bridge',
-          predicate: (h) =>
-            h.metadata.kind === 'ipv4' && (ssl === undefined || h.ssl === ssl),
-        })
-        .hostnames[0]
-    : undefined
+export function bridgeAddress(
+  effects: T.Effects,
+  opts: {
+    packageId: string
+    hostId: string
+    internalPort: number
+    fallbackPort: number
+  },
+): { const(): Promise<string>; once(): Promise<string> }
+export function bridgeAddress(
+  effects: T.Effects,
+  opts: { packageId: string; hostId: string; internalPort: number },
+): { const(): Promise<string | null>; once(): Promise<string | null> }
+export function bridgeAddress(
+  effects: T.Effects,
+  opts: {
+    packageId: string
+    hostId: string
+    internalPort: number
+    fallbackPort?: number
+  },
+) {
+  const watchable = async () => {
+    const osIp = await sdk.getOsIp(effects)
+    return sdk.host.get(
+      effects,
+      { packageId: opts.packageId, hostId: opts.hostId },
+      (host) => {
+        const port =
+          host?.bindings[opts.internalPort]?.net.assignedPort ??
+          opts.fallbackPort
+        return port != null ? `${osIp}:${port}` : null
+      },
+    )
+  }
+  return {
+    const: async () => (await watchable()).const(),
+    once: async () => (await watchable()).once(),
+  }
 }
 
 /**
  * LND's REST + gRPC addresses over the LXC bridge, injected into start.sh as
  * LND_REST_URL / LND_GRPC_ADDRESS. LND's `lnd.startos` DNS name is gone in 2.0;
  * its StartOS-issued TLS cert now covers the bridge address, so lndk and curl
- * still pin it. Throws until LND has exported both hosts (its REST/gRPC
- * interfaces appear only once its wallet macaroon exists) — which re-runs
- * setupMain when they resolve.
+ * still pin it. LND's REST/gRPC bindings appear only once its wallet macaroon
+ * exists, so each address resolves null until the first unlock — a loopback
+ * placeholder holds start.sh's retry loops harmless meanwhile, and the
+ * `.const()` heals main onto the real address (one restart) when LND binds,
+ * then stays stable across lock/unlock cycles.
  */
 export async function lndBridgeEnv(
   effects: T.Effects,
 ): Promise<Record<string, string>> {
-  const restUrl = await sdk.host
-    .get(effects, { hostId: controlHostId, packageId: 'lnd' }, (host) => {
-      const h = bridgeAddr(host, lndconnectRestId, true)
-      return h && `https://${h.hostname}:${h.port}`
-    })
-    .const()
-  const grpcUrl = await sdk.host
-    .get(effects, { hostId: gRPCHostId, packageId: 'lnd' }, (host) => {
-      const h = bridgeAddr(host, gRPCInterfaceId, true)
-      return h && `https://${h.hostname}:${h.port}`
-    })
-    .const()
-  if (!restUrl || !grpcUrl) {
-    throw new Error(
-      'LND is not yet reachable on the internal network. Waiting for LND to finish starting...',
-    )
+  const rest = await bridgeAddress(effects, {
+    packageId: 'lnd',
+    hostId: controlHostId,
+    internalPort: restPort,
+  }).const()
+  const grpc = await bridgeAddress(effects, {
+    packageId: 'lnd',
+    hostId: gRPCHostId,
+    internalPort: gRPCPort,
+  }).const()
+  return {
+    LND_REST_URL: `https://${rest ?? `127.0.0.1:${restPort}`}`,
+    LND_GRPC_ADDRESS: `https://${grpc ?? `127.0.0.1:${gRPCPort}`}`,
   }
-  return { LND_REST_URL: restUrl, LND_GRPC_ADDRESS: grpcUrl }
 }
 
 /**
