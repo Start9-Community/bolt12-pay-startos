@@ -101,7 +101,16 @@ Pick one of the service's non-local URLs (use a **clearnet or custom-domain** UR
 | **Reached at**      | LND's REST (`:8080`) and gRPC (`:10009`) over the StartOS LXC bridge — resolved from LND's `control`/`grpc` hosts and injected into `start.sh` as `LND_REST_URL` / `LND_GRPC_ADDRESS` (the `lnd.startos` DNS name is gone in StartOS 0.4.0) |
 | **Purpose**         | Create and pay BOLT12 offers via LNDK                                                                                                                                                                                                       |
 
-**Requires LND 0.21 or newer.** BOLT12 offers need onion-message support, which LND advertises natively from 0.21 — no `lnd.conf` changes and no setup task. (Earlier releases required the `protocol.custom-*` entries, set via a one-click Auto-Configure task; that's obsolete now and the task has been removed.)
+**Supports LND 0.20 and 0.21** (`>=0.20.1-beta:12`). BOLT12 offers need onion-message support, and how it is obtained depends on the LND version — so `startos/dependencies.ts` reads LND's installed version and posts the Auto-Configure task only where it is needed:
+
+| Installed LND  | Onion messages                        | Auto-Configure task                                     |
+| -------------- | ------------------------------------- | ------------------------------------------------------- |
+| `>=0.21.0-beta:0` | Advertised natively (feature bit 39)  | Not posted; cleared if one already exists               |
+| `<0.21.0-beta:0`  | Require the `protocol.custom-*` entries in `lnd.conf` | Posted as `critical` against LND's hidden `autoconfig` action |
+
+Setting the `protocol.custom-*` entries on LND 0.21 is not merely redundant — LND aborts server creation (`feature bit: 39 already set`) and crash-loops. The version is read with `sdk.getServiceManifest(...).const()`, so upgrading LND from 0.20 to 0.21 re-runs init and clears the task instead of stranding the user with a critical task they cannot satisfy.
+
+LND 0.21's config spec removes the `onion-messages` toggle altogether, so the typed `autoconfig` action we import can no longer describe the field. The task is therefore posted through the raw `effects.action.createTask` effect (same `replayId` the SDK helper would derive, `lnd:autoconfig`), whose input is the OS's untyped `TaskInput`.
 
 See [instructions.md](./instructions.md) for the user-facing steps.
 
@@ -127,7 +136,7 @@ LND credentials are not backed up here; they live on the LND package and are re-
 
 ## Limitations and Differences
 
-1. **LND onion messages** — BOLT12 offers require onion-message support, which LND provides natively from 0.21; BOLT12 Pay requires LND `>=0.21.0-beta:0` and no longer configures anything on LND.
+1. **LND onion messages** — BOLT12 offers require onion-message support. LND provides it natively from 0.21; on LND 0.20 it is enabled through a one-click Auto-Configure task. BOLT12 Pay accepts LND `>=0.20.1-beta:12` and posts the task only to pre-0.21 nodes.
 2. **LNURL base URL** — seeded from the **Set Primary URL** action; the in-app admin settings can still override it. All other app configuration is done inside the web UI.
 3. **Mainnet only** — the LND macaroon path is pinned to `data/chain/bitcoin/mainnet`.
 
@@ -156,7 +165,7 @@ lnd_reached_at: LXC bridge (REST :8080, gRPC :10009), injected into start.sh as 
 ports:
   ui: 8081
 dependencies:
-  - lnd (required, >=0.21.0-beta:0; onion messages are native in LND 0.21 — nothing configured)
+  - lnd (required, >=0.20.1-beta:12; onion messages native on 0.21, Auto-Configure task posted on 0.20)
 actions:
   - set-primary-url
 ```
