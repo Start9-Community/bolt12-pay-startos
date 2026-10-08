@@ -30,4 +30,4 @@ BOLT12 Pay is built locally from the [`Dockerfile`](./Dockerfile). The image has
 
 - **LNDK** — set the `lndkstage` tag in the [`Dockerfile`](./Dockerfile) to the new `alex71btc/lndk:<tag>`.
 
-Then bump `version` and `releaseNotes` in `startos/versions/` per [CONTRIBUTING.md](./CONTRIBUTING.md).
+Then bump `version` and `releaseNotes` in `startos/versions/`.

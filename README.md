@@ -69,7 +69,7 @@ One model, holding a single value.
 | ------------ | ------ | ----------------------- | -------------------------- |
 | `store.json` | JSON   | Yes — `FileHelper.json` | The Set Primary URL action |
 
-It records `primaryUrl` — one of this service's own non-local addresses, chosen by the user. `main` reads it reactively, so setting it re-runs and the app picks it up.
+It records `primaryUrl` — one of this service's own non-local addresses, chosen by the user. `main` reads it reactively through the primary-URL helper's `bestUsable`, so setting it restarts the service with the new value. If the chosen hostname moves to another port, `bestUsable` follows it; if the hostname is no longer one of the interface's addresses, it yields nothing and the four variables below are omitted.
 
 **What the package derives from it is four environment variables**, not one: the LNURL base URL, its bare domain, and the LNURL and BIP353 addresses built from that domain. They are **defaults** — the application's own admin settings still override them — so a value set in-app and a value set here can disagree, and the in-app one wins.
 
@@ -89,7 +89,7 @@ The package reaches **both** of LND's interfaces over the internal bridge — RE
 
 **LND binds neither until its wallet has been unlocked at least once.** Until then each address resolves to nothing and the package **omits the variable** rather than writing a placeholder; `start.sh` blocks on its own wait for the certificate and macaroon, the health check stays red, and `main` heals onto the real addresses with a single restart once LND binds.
 
-**BOLT12 needs onion messages on LND**, and how that is obtained depends on LND's version. LND advertises them natively from 0.21 onward. Older LND needed them turned on explicitly — and setting them on a version that already has them is not merely redundant, it aborts LND's startup and crash-loops it. So the package reads LND's installed version and raises a configuration task **only** where it is actually needed, clearing it if the user upgrades. In practice the declared dependency range now admits only versions with native support, so that task should not appear.
+**BOLT12 needs onion messages on LND**, which LND advertises natively from 0.21 onward. The dependency range admits only such versions, so the package configures nothing on LND.
 
 ## Network Access and Interfaces
 
@@ -99,7 +99,7 @@ One interface.
 | --------- | ---- | ---- | ---- | ---------------------------- |
 | Web UI    | `ui` | ui   | 8081 | The BOLT12 Pay web interface |
 
-Bound on the `main` MultiHost over HTTP and not masked.
+Bound on the `main` MultiHost over HTTP and not masked. Once a primary URL is chosen, **Open UI** prefers that address when StartOS considers it reachable from the current session; an onion origin, for example, is used only from a Tor session.
 
 **Which address this is reached at is not cosmetic here.** LNURL and Lightning Address require a _publicly resolvable_ host, because the sender's wallet — not the user's browser — has to fetch the well-known endpoint. A Tor or `.local` address works fine for the operator and cannot be used by anyone paying them. That is what [Set Primary URL](#actions) exists to settle, and why it only offers non-local addresses.
 
@@ -120,9 +120,9 @@ One action.
 Chooses which of this service's non-local addresses to advertise as the LNURL and Lightning Address base. Run it after adding a public domain, and again if that domain changes.
 
 - **What it changes:** `primaryUrl` in the package store, and through it four environment variables on the next start.
-- **Cost:** applies on restart. The action itself only writes the store.
+- **Cost:** if the service is running, it restarts to apply the new value.
 - **Repeat safety:** idempotent; the last choice wins.
-- **Input:** a dropdown of the service's current non-local addresses. **If the service has no non-local addresses the dropdown is empty** — that is a missing domain, not a broken action.
+- **Input:** a dropdown of the service's current non-local addresses, with nothing preselected. **If the service has no non-local addresses the dropdown is empty** — that is a missing domain, not a broken action.
 - **Choose a clearnet or custom-domain address.** Tor and `.local` will not resolve for whoever is trying to pay you.
 - **It is not the last word.** The application's own admin settings override these values.
 
@@ -132,9 +132,9 @@ One, and it is raised by circumstance rather than at install.
 
 | Task            | Severity   | Raised when                                            | Cleared when    |
 | --------------- | ---------- | ------------------------------------------------------ | --------------- |
-| Set Primary URL | `critical` | A previously chosen primary URL is no longer available | The action runs |
+| Set Primary URL | `critical` | A previously chosen primary URL is no longer available | The action runs, or the chosen address returns |
 
-**It is never raised on a fresh install** — only when a URL that _was_ set has since disappeared, typically because a custom domain was removed. That is the case worth interrupting for: the service keeps running and quietly advertises an address that no longer resolves, which fails silently for senders and is invisible from the operator's side.
+**It is never raised on a fresh install** — only when a URL that _was_ set has since disappeared, typically because a custom domain was removed. That is the case worth interrupting for: the address the package advertised no longer resolves, which fails silently for senders and is invisible from the operator's side.
 
 A user who has never set a primary URL sees no task, because there is nothing to repair.
 

@@ -18,15 +18,23 @@ Freshly scaffolded? Work the
 guide page, not a file in this repo — read it, don't copy it in.
 
 Keep `README.md` (technical reference for an AI support or administering agent) and
-`instructions.md` (end-user docs) in sync with your changes.
+`instructions.md` (end-user docs) in sync with your changes. This file restates neither:
+whoever changes the package has both, so it carries only what they don't — repo mechanics,
+a change that looks right and is not, where the next thing gets added, a naming trap, a
+build or test invocation particular to this repo.
 
-**Bugs and feature requests are GitHub issues on this repo** — file them as you find them.
+**Fix a defect you spot rather than reporting it** — you have the package open and the
+context to be sure. File **a GitHub issue on this repo** only when the call isn't yours to
+make: you can't pin the cause down, two defensible fixes exist, or it's too large to ride on
+the work in hand. An open issue is a report, not a queue — implement one when you're asked
+to or when it's labelled `Approved`, then close it with `Closes #<n>`.
+
 Don't record work in the repo instead: no `TODO.md`, no `NOTES.md`, no `PLAN.md`. What you
 verified, tried, and decided belongs in the commit message and the PR body.
 
 ## This repo
 
 - **Resolve LND's addresses with `getBridgeAddress`, chained `.const()`, importing the host ids and ports from `lnd-startos/startos/interfaces`.** Don't read `net.assignedPort`/`assignedSslPort` directly: which of those is populated depends on how the dependency bound the port, and `getBridgeAddress` reads the binding's own derived address instead.
-- **The onion-messages task must stay version-gated, and must stay on the raw effect.** Setting `protocol.custom-*` on LND 0.21 aborts server creation (`feature bit: 39 already set`) and crash-loops it, so `dependencies.ts` reads LND's installed version and posts the task only below 0.21, clearing it on upgrade. 0.21's config spec drops the `onion-messages` toggle entirely, so the typed action we import can no longer describe the field — hence `effects.action.createTask` with the same `replayId` the SDK helper would derive. Don't "simplify" it back to the typed helper.
-  - **The declared `versionRange` has since moved above 0.21, so that branch is currently unreachable.** Either the range or the branch is redundant; decide deliberately rather than deleting the branch by assumption, since it is the only thing standing between a downgraded LND and a crash loop.
-- **`store.json` lives on the `startos` volume, which is not mounted into the container and is not backed up.** That is what keeps the package's chosen URL out of the application's reach — but it also means the primary URL does not survive a restore. Don't move it to `main` to "fix" the backup without deciding whether the app should be able to see it.
+- **Never ask LND to enable onion messages.** LND 0.21 advertises them natively, and setting `protocol.custom-*` on top aborts server creation (`feature bit: 39 already set`) and crash-loops it.
+- **Keep the primary URL's `fallback: false` and the hand-written `taskSetPrimaryUrl`.** A fallback would advertise `.local` as the LNURL base, and `primaryUrl.setupTask` would raise a task on every fresh install, where LNURL is opt-in.
+- **`store.json` lives on the `startos` volume, which is not mounted into the container and is not backed up.** That keeps the package's chosen URL out of the application's reach, but the primary URL does not survive a restore. Don't move it to `main` to "fix" the backup without deciding whether the app should be able to see it.
