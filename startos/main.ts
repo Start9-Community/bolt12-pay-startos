@@ -1,5 +1,5 @@
 import { sdk } from './sdk'
-import { storeJson } from './fileModels/store.json'
+import { primaryUrl } from './primaryUrl'
 import { lndBridgeEnv, lnurlEnv, uiPort } from './utils'
 
 export const main = sdk.setupMain(async ({ effects }) => {
@@ -7,7 +7,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
 
   // Feed the user-selected primary URL to the app as its native LNURL/BIP353
   // env defaults. Re-runs main when the "Set Primary URL" action changes it.
-  const primaryUrl = await storeJson.read((s) => s.primaryUrl).const(effects)
+  const url = await primaryUrl.bestUsable(effects).const()
 
   // LND's `lnd.startos` DNS name is gone in 2.0; resolve its REST + gRPC over
   // the LXC bridge and hand them to start.sh. Re-runs main if either moves.
@@ -35,7 +35,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
     ),
     exec: {
       command: ['/usr/local/bin/docker_entrypoint.sh'],
-      env: { ...lndEnv, ...lnurlEnv(primaryUrl) },
+      env: { ...lndEnv, ...lnurlEnv(url) },
     },
     ready: {
       display: 'Web UI',

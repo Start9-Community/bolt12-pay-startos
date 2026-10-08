@@ -10,22 +10,9 @@ import { sdk } from './sdk'
 export const uiPort = 8081
 
 // Host id (the `sdk.MultiHost.of` group) carrying the ui interface — distinct
-// from the interface id exported on it. Used for `sdk.host.getOwn` lookups.
+// from the interface id exported on it.
 export const uiHostId = 'main'
 export const uiInterfaceId = 'ui'
-
-export async function getNonLocalUrls(effects: T.Effects): Promise<string[]> {
-  return sdk.host
-    .getOwn(effects, uiHostId, (host) => {
-      const iface =
-        host &&
-        Object.values(host.bindings)
-          .flatMap((b) => Object.values(b.interfaces))
-          .find((i) => i.id === uiInterfaceId)
-      return iface ? iface.addressInfo.nonLocal.format() : []
-    })
-    .const()
-}
 
 /**
  * LND's REST + gRPC addresses over the LXC bridge, injected into start.sh as
