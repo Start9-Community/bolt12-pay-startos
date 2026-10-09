@@ -1,28 +1,38 @@
 import { VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.3.5:1',
+  version: '0.3.6:0',
 
   releaseNotes: {
-    en_US: `- If the chosen primary URL moves to another port, BOLT12 Pay follows it.
-- The Set Primary URL task clears itself when the chosen address returns.
-- Open UI opens BOLT12 Pay at the chosen primary URL when your connection can reach it.`,
+    en_US: `Lightning Activity now displays locally formatted dates and times for incoming and outgoing payments, with German and English support.
 
-    de_DE: `- Wechselt die gewählte primäre URL auf einen anderen Port, folgt BOLT12 Pay ihr.
-- Die Aufgabe „Set Primary URL“ verschwindet von selbst, sobald die gewählte Adresse zurückkehrt.
-- „Oberfläche öffnen“ öffnet BOLT12 Pay unter der gewählten primären URL, wenn die Verbindung sie erreichen kann.`,
+Older entries without a valid timestamp display a clear fallback message. The layout supports mobile and desktop.
 
-    es_ES: `- Si la URL principal elegida pasa a otro puerto, BOLT12 Pay la sigue.
-- La tarea Set Primary URL se retira sola cuando vuelve la dirección elegida.
-- Abrir interfaz abre BOLT12 Pay en la URL principal elegida cuando la conexión puede alcanzarla.`,
+Existing application data and payment history are preserved. No manual migration is required.`,
 
-    fr_FR: `- Si l'URL principale choisie passe à un autre port, BOLT12 Pay la suit.
-- La tâche Set Primary URL disparaît d'elle-même lorsque l'adresse choisie revient.
-- Ouvrir l'interface ouvre BOLT12 Pay à l'URL principale choisie lorsque la connexion peut l'atteindre.`,
+    de_DE: `Die Lightning-Aktivität zeigt jetzt lokal formatierte Datums- und Uhrzeitangaben für eingehende und ausgehende Zahlungen auf Deutsch und Englisch.
 
-    pl_PL: `- Jeśli wybrany główny URL przejdzie na inny port, BOLT12 Pay podąża za nim.
-- Zadanie „Set Primary URL” znika samo, gdy wybrany adres wróci.
-- „Otwórz interfejs” otwiera BOLT12 Pay pod wybranym głównym URL, gdy połączenie może go osiągnąć.`,
+Ältere Einträge ohne gültigen Zeitstempel zeigen einen verständlichen Hinweis. Die Darstellung unterstützt Mobilgeräte und Desktop.
+
+Bestehende App-Daten und der Zahlungsverlauf bleiben erhalten. Keine manuelle Migration erforderlich.`,
+
+    es_ES: `La actividad Lightning ahora muestra fechas y horas con formato local para pagos entrantes y salientes, con soporte para alemán e inglés.
+
+Las entradas antiguas sin una marca de tiempo válida muestran un mensaje claro. El diseño es compatible con móviles y ordenadores.
+
+Se conservan los datos existentes de la aplicación y el historial de pagos. No se requiere migración manual.`,
+
+    fr_FR: `L'activité Lightning affiche désormais les dates et heures au format local pour les paiements entrants et sortants, en allemand et en anglais.
+
+Les anciennes entrées sans horodatage valide affichent un message clair. L'affichage convient aux appareils mobiles et aux ordinateurs.
+
+Les données existantes de l'application et l'historique des paiements sont conservés. Aucune migration manuelle n'est nécessaire.`,
+
+    pl_PL: `Aktywność Lightning wyświetla teraz daty i godziny w lokalnym formacie dla płatności przychodzących i wychodzących, z obsługą języka niemieckiego i angielskiego.
+
+Starsze wpisy bez prawidłowego znacznika czasu pokazują czytelny komunikat. Układ obsługuje urządzenia mobilne i komputery.
+
+Istniejące dane aplikacji i historia płatności zostają zachowane. Ręczna migracja nie jest wymagana.`,
   },
 
   migrations: {
