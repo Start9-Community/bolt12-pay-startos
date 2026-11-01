@@ -1,93 +1,68 @@
 import { VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.3.18:0',
+  version: '0.3.19:0',
 
   releaseNotes: {
-    en_US: `BOLT12 Pay 0.3.18 — Payment and Login UX Improvements
+    en_US: `BOLT12 Pay 0.3.19 — Lightning Activity and Mobile UX
 
-v0.3.17 — Payments
-- Submit payments with Enter, preserving validation and duplicate-payment protection.
-- Compact QR scanner, clipboard and saved-contact controls beside the Pay field.
-- Smart clipboard detection for BOLT12, BOLT11, LNURL, Lightning Addresses and node public keys.
-- Copy Lightning Addresses and BOLT12 offers directly from the Pay field.
-- Improved saved-contact detection, mobile notifications and clipboard fallback.
+- Automatically expand and refresh Lightning Activity after successful payments.
+- Reuse supported Lightning Addresses, BIP353 addresses, BOLT12 offers, LNURL-pay targets and Keysend pubkeys from payment history.
+- Clear the amount and payer note when preparing another payment. Payments are never sent automatically.
+- Exclude single-use BOLT11 invoices and technical identifiers from quick repeat payments.
+- Prevent unnecessary Android keyboard popups when inserting payment targets from contacts, clipboard, links or history.
+- Dismiss the keyboard after successful payments and improve the contacts picker.
+- Keep the web interface responsive during BIP353 resolution and LNDK invoice timeouts.
 
-v0.3.18 — Login
-- Submit login using Enter, the mobile keyboard action or the Login button.
-- Improved automatic login with saved Chrome password-manager credentials on Android.
-- Prevent duplicate login requests and validate empty submissions.
-- Improved localized error messages, rate-limit feedback and safe redirects.
+No manual migration required. Existing application data is preserved. LNDK and Android Companion remain unchanged.`,
 
-No manual migration required. Existing offers, payment history, Lightning Addresses, Nostr identities and NWC connections are preserved. LNDK remains at 0.3.16. Android Companion remains unchanged.`,
+    de_DE: `BOLT12 Pay 0.3.19 — Lightning Activity und mobile Bedienung
 
-    de_DE: `BOLT12 Pay 0.3.18 — Verbesserungen für Zahlungen und Anmeldung
+- Lightning Activity nach erfolgreichen Zahlungen automatisch öffnen und aktualisieren.
+- Gespeicherte Lightning-Adressen, BIP353-Adressen, BOLT12-Offers, LNURL-pay-Ziele und Keysend-Public-Keys für neue Zahlungen wiederverwenden.
+- Betrag und Payer Note bei erneuter Verwendung zurücksetzen. Zahlungen werden niemals automatisch ausgelöst.
+- Einmalige BOLT11-Invoices und technische Kennungen von der Wiederverwendung ausschließen.
+- Unnötiges Öffnen der Android-Tastatur beim Einfügen aus Kontakten, Zwischenablage, Links oder Verlauf verhindern.
+- Tastatur nach erfolgreichen Zahlungen schließen und die Kontaktauswahl verbessern.
+- Weboberfläche bleibt während BIP353-Auflösung und LNDK-Invoice-Timeouts bedienbar.
 
-v0.3.17 — Zahlungen
-- Zahlungen direkt mit Enter starten, inklusive Validierung und Schutz vor Doppelzahlungen.
-- Kompakte Schaltflächen für QR-Scanner, Zwischenablage und Kontakte neben dem Zahlungsfeld.
-- Automatische Erkennung von BOLT12, BOLT11, LNURL, Lightning-Adressen und Node-Public-Keys aus der Zwischenablage.
-- Lightning-Adressen und BOLT12-Offers direkt aus dem Zahlungsfeld kopieren.
-- Verbesserte Kontakterkennung, mobile Benachrichtigungen und Zwischenablage-Fallbacks.
+Keine manuelle Datenmigration erforderlich. Bestehende App-Daten bleiben erhalten. LNDK und Android Companion bleiben unverändert.`,
 
-v0.3.18 — Anmeldung
-- Anmeldung mit Enter, der mobilen Tastaturaktion oder dem Login-Button.
-- Verbesserte automatische Anmeldung mit gespeicherten Chrome-Passwörtern unter Android.
-- Schutz vor doppelten Login-Anfragen und Validierung leerer Eingaben.
-- Verbesserte übersetzte Fehlermeldungen, Sperrzeit-Anzeigen und sichere Weiterleitungen.
+    es_ES: `BOLT12 Pay 0.3.19 — Historial Lightning y experiencia móvil
 
-Keine manuelle Datenmigration erforderlich. Bestehende Offers, Zahlungsverläufe, Lightning-Adressen, Nostr-Identitäten und NWC-Verbindungen bleiben erhalten. LNDK bleibt auf 0.3.16. Der Android Companion bleibt unverändert.`,
+- Abrir y actualizar automáticamente Lightning Activity después de cada pago correcto.
+- Reutilizar direcciones Lightning y BIP353, ofertas BOLT12, destinos LNURL-pay y claves públicas Keysend desde el historial.
+- Restablecer el importe y la nota antes de preparar otro pago. Nunca se envían pagos automáticamente.
+- Excluir facturas BOLT11 de un solo uso e identificadores técnicos.
+- Evitar que el teclado de Android aparezca innecesariamente al insertar destinos desde contactos, portapapeles, enlaces o historial.
+- Cerrar el teclado después de pagar y mejorar el selector de contactos.
+- Mantener la interfaz disponible durante la resolución BIP353 y los tiempos de espera de LNDK.
 
-    es_ES: `BOLT12 Pay 0.3.18 — Mejoras en pagos e inicio de sesión
+No se requiere migración manual. Se conservan los datos existentes. LNDK y Android Companion no cambian.`,
 
-v0.3.17 — Pagos
-- Enviar pagos con Enter, manteniendo la validación y la protección contra pagos duplicados.
-- Accesos directos al escáner QR, portapapeles y contactos junto al campo de pago.
-- Detección de BOLT12, BOLT11, LNURL, direcciones Lightning y claves públicas de nodos.
-- Copiar direcciones Lightning y ofertas BOLT12 directamente desde el campo de pago.
-- Mejoras en contactos guardados, avisos móviles y alternativas del portapapeles.
+    fr_FR: `BOLT12 Pay 0.3.19 — Activité Lightning et expérience mobile
 
-v0.3.18 — Inicio de sesión
-- Iniciar sesión con Enter, el teclado móvil o el botón Login.
-- Inicio de sesión automático mejorado con contraseñas guardadas en Chrome para Android.
-- Protección contra solicitudes duplicadas y validación de campos vacíos.
-- Mejoras en mensajes de error traducidos, límites de intentos y redirecciones seguras.
+- Ouvrir et actualiser automatiquement Lightning Activity après un paiement réussi.
+- Réutiliser les adresses Lightning et BIP353, les offres BOLT12, les destinations LNURL-pay et les clés publiques Keysend depuis l'historique.
+- Réinitialiser le montant et la note avant un nouveau paiement. Aucun paiement automatique.
+- Exclure les factures BOLT11 à usage unique et les identifiants techniques.
+- Éviter l'ouverture inutile du clavier Android lors de l'insertion depuis les contacts, le presse-papiers, les liens ou l'historique.
+- Fermer le clavier après un paiement et améliorer la sélection des contacts.
+- Garder l'interface réactive pendant la résolution BIP353 et les délais d'attente LNDK.
 
-No se requiere migración manual. Se conservan las ofertas, el historial de pagos, las direcciones Lightning, las identidades Nostr y las conexiones NWC. LNDK permanece en 0.3.16. Android Companion no cambia.`,
+Aucune migration manuelle requise. Les données existantes sont conservées. LNDK et Android Companion restent inchangés.`,
 
-    fr_FR: `BOLT12 Pay 0.3.18 — Améliorations des paiements et de la connexion
+    pl_PL: `BOLT12 Pay 0.3.19 — Historia Lightning i wygodniejsza obsługa mobilna
 
-v0.3.17 — Paiements
-- Envoyer un paiement avec Entrée, avec validation et protection contre les doublons.
-- Accès rapide au scanner QR, au presse-papiers et aux contacts près du champ de paiement.
-- Détection des offres BOLT12, factures BOLT11, LNURL, adresses Lightning et clés publiques de nœuds.
-- Copier directement les adresses Lightning et les offres BOLT12.
-- Amélioration des contacts enregistrés, notifications mobiles et solutions de repli du presse-papiers.
+- Automatyczne otwieranie i odświeżanie Lightning Activity po udanych płatnościach.
+- Ponowne używanie adresów Lightning i BIP353, ofert BOLT12, celów LNURL-pay oraz kluczy publicznych Keysend z historii.
+- Resetowanie kwoty i notatki przed kolejną płatnością. Płatności nigdy nie są wysyłane automatycznie.
+- Wykluczenie jednorazowych faktur BOLT11 i identyfikatorów technicznych.
+- Zapobieganie niepotrzebnemu otwieraniu klawiatury Androida po wstawieniu danych z kontaktów, schowka, linków lub historii.
+- Zamykanie klawiatury po płatności i ulepszony wybór kontaktów.
+- Zachowanie responsywności interfejsu podczas rozwiązywania BIP353 i przekroczenia czasu oczekiwania LNDK.
 
-v0.3.18 — Connexion
-- Se connecter avec Entrée, le clavier mobile ou le bouton Login.
-- Connexion automatique améliorée avec les mots de passe enregistrés dans Chrome sur Android.
-- Protection contre les connexions simultanées et validation des champs vides.
-- Amélioration des erreurs traduites, des messages de limitation et des redirections sécurisées.
-
-Aucune migration manuelle requise. Les offres, l'historique des paiements, les adresses Lightning, les identités Nostr et les connexions NWC sont conservés. LNDK reste en version 0.3.16. Android Companion reste inchangé.`,
-
-    pl_PL: `BOLT12 Pay 0.3.18 — Ulepszenia płatności i logowania
-
-v0.3.17 — Płatności
-- Wysyłanie płatności klawiszem Enter z walidacją i ochroną przed duplikatami.
-- Szybki dostęp do skanera QR, schowka i kontaktów obok pola płatności.
-- Rozpoznawanie ofert BOLT12, faktur BOLT11, LNURL, adresów Lightning i kluczy publicznych węzłów.
-- Kopiowanie adresów Lightning i ofert BOLT12 bezpośrednio z pola płatności.
-- Lepsza obsługa zapisanych kontaktów, powiadomień mobilnych i schowka.
-
-v0.3.18 — Logowanie
-- Logowanie klawiszem Enter, klawiaturą mobilną lub przyciskiem Login.
-- Ulepszone automatyczne logowanie z zapisanymi hasłami Chrome na Androidzie.
-- Ochrona przed równoczesnymi żądaniami i sprawdzanie pustych pól.
-- Lepsze komunikaty błędów, informacje o limitach prób i bezpieczne przekierowania.
-
-Nie jest wymagana ręczna migracja. Oferty, historia płatności, adresy Lightning, tożsamości Nostr i połączenia NWC zostają zachowane. LNDK pozostaje w wersji 0.3.16. Android Companion pozostaje bez zmian.`,
+Ręczna migracja nie jest wymagana. Istniejące dane zostają zachowane. LNDK i Android Companion pozostają bez zmian.`,
   },
 
   migrations: {
