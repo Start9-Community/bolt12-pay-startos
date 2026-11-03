@@ -1,68 +1,68 @@
 import { VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.3.19:0',
+  version: '0.3.20:0',
 
   releaseNotes: {
-    en_US: `BOLT12 Pay 0.3.19 — Lightning Activity and Mobile UX
+    en_US: `BOLT12 Pay 0.3.20 — Five-Language Release
 
-- Automatically expand and refresh Lightning Activity after successful payments.
-- Reuse supported Lightning Addresses, BIP353 addresses, BOLT12 offers, LNURL-pay targets and Keysend pubkeys from payment history.
-- Clear the amount and payer note when preparing another payment. Payments are never sent automatically.
-- Exclude single-use BOLT11 invoices and technical identifiers from quick repeat payments.
-- Prevent unnecessary Android keyboard popups when inserting payment targets from contacts, clipboard, links or history.
-- Dismiss the keyboard after successful payments and improve the contacts picker.
-- Keep the web interface responsive during BIP353 resolution and LNDK invoice timeouts.
+- Full interface support for English, German, Spanish, French and Polish.
+- Translate Pay, Console, Setup, Login, public payment pages and aliases.
+- Switch languages without losing entered values or the current payment context.
+- Update Android Companion to v1.0.1 with native per-app language selection.
+- Fix the initial Pay QR code to show the configured address or active offer.
+- Improve mobile payment-target editing and touch-to-copy.
+- Refine language selectors and show the application version on Pay.
 
-No manual migration required. Existing application data is preserved. LNDK and Android Companion remain unchanged.`,
+No manual migration required. Existing application data is preserved. LNDK remains unchanged.`,
 
-    de_DE: `BOLT12 Pay 0.3.19 — Lightning Activity und mobile Bedienung
+    de_DE: `BOLT12 Pay 0.3.20 — Fünfsprachige Benutzeroberfläche
 
-- Lightning Activity nach erfolgreichen Zahlungen automatisch öffnen und aktualisieren.
-- Gespeicherte Lightning-Adressen, BIP353-Adressen, BOLT12-Offers, LNURL-pay-Ziele und Keysend-Public-Keys für neue Zahlungen wiederverwenden.
-- Betrag und Payer Note bei erneuter Verwendung zurücksetzen. Zahlungen werden niemals automatisch ausgelöst.
-- Einmalige BOLT11-Invoices und technische Kennungen von der Wiederverwendung ausschließen.
-- Unnötiges Öffnen der Android-Tastatur beim Einfügen aus Kontakten, Zwischenablage, Links oder Verlauf verhindern.
-- Tastatur nach erfolgreichen Zahlungen schließen und die Kontaktauswahl verbessern.
-- Weboberfläche bleibt während BIP353-Auflösung und LNDK-Invoice-Timeouts bedienbar.
+- Vollständige Oberfläche auf Deutsch, Englisch, Spanisch, Französisch und Polnisch.
+- Übersetzungen für Pay, Console, Setup, Login, öffentliche Zahlungsseiten und Aliase.
+- Sprachwechsel ohne Verlust eingegebener Werte oder des aktuellen Zahlungskontexts.
+- Android Companion v1.0.1 mit eigener Sprachwahl pro App.
+- Korrektur des anfänglichen Pay-QR-Codes: konfigurierte Adresse oder aktives Offer.
+- Verbesserte Bearbeitung und Kopierfunktion für Zahlungsziele auf Mobilgeräten.
+- Einheitlichere Sprachauswahl und Versionsanzeige auf der Pay-Seite.
 
-Keine manuelle Datenmigration erforderlich. Bestehende App-Daten bleiben erhalten. LNDK und Android Companion bleiben unverändert.`,
+Keine manuelle Migration erforderlich. Bestehende App-Daten bleiben erhalten. LNDK bleibt unverändert.`,
 
-    es_ES: `BOLT12 Pay 0.3.19 — Historial Lightning y experiencia móvil
+    es_ES: `BOLT12 Pay 0.3.20 — Interfaz en cinco idiomas
 
-- Abrir y actualizar automáticamente Lightning Activity después de cada pago correcto.
-- Reutilizar direcciones Lightning y BIP353, ofertas BOLT12, destinos LNURL-pay y claves públicas Keysend desde el historial.
-- Restablecer el importe y la nota antes de preparar otro pago. Nunca se envían pagos automáticamente.
-- Excluir facturas BOLT11 de un solo uso e identificadores técnicos.
-- Evitar que el teclado de Android aparezca innecesariamente al insertar destinos desde contactos, portapapeles, enlaces o historial.
-- Cerrar el teclado después de pagar y mejorar el selector de contactos.
-- Mantener la interfaz disponible durante la resolución BIP353 y los tiempos de espera de LNDK.
+- Interfaz completa en inglés, alemán, español, francés y polaco.
+- Traducciones de Pay, Console, configuración, inicio de sesión, páginas públicas y alias.
+- Cambio de idioma sin perder los datos introducidos ni el contexto del pago.
+- Android Companion v1.0.1 con selección de idioma independiente para la aplicación.
+- Corrección del QR inicial de Pay: muestra la dirección configurada o la oferta activa.
+- Mejor edición y copia de destinos de pago en dispositivos móviles.
+- Selector de idioma refinado y versión visible en la página Pay.
 
-No se requiere migración manual. Se conservan los datos existentes. LNDK y Android Companion no cambian.`,
+No se requiere migración manual. Se conservan los datos existentes. LNDK permanece sin cambios.`,
 
-    fr_FR: `BOLT12 Pay 0.3.19 — Activité Lightning et expérience mobile
+    fr_FR: `BOLT12 Pay 0.3.20 — Interface en cinq langues
 
-- Ouvrir et actualiser automatiquement Lightning Activity après un paiement réussi.
-- Réutiliser les adresses Lightning et BIP353, les offres BOLT12, les destinations LNURL-pay et les clés publiques Keysend depuis l'historique.
-- Réinitialiser le montant et la note avant un nouveau paiement. Aucun paiement automatique.
-- Exclure les factures BOLT11 à usage unique et les identifiants techniques.
-- Éviter l'ouverture inutile du clavier Android lors de l'insertion depuis les contacts, le presse-papiers, les liens ou l'historique.
-- Fermer le clavier après un paiement et améliorer la sélection des contacts.
-- Garder l'interface réactive pendant la résolution BIP353 et les délais d'attente LNDK.
+- Interface complète en anglais, allemand, espagnol, français et polonais.
+- Traduction de Pay, Console, configuration, connexion, pages publiques et alias.
+- Changement de langue sans perdre les saisies ni le contexte du paiement.
+- Android Companion v1.0.1 avec choix de la langue propre à l'application.
+- Correction du QR initial de Pay : adresse configurée ou offre active.
+- Amélioration de la modification et de la copie des destinations sur mobile.
+- Sélecteur de langue affiné et version affichée sur la page Pay.
 
-Aucune migration manuelle requise. Les données existantes sont conservées. LNDK et Android Companion restent inchangés.`,
+Aucune migration manuelle requise. Les données existantes sont conservées. LNDK reste inchangé.`,
 
-    pl_PL: `BOLT12 Pay 0.3.19 — Historia Lightning i wygodniejsza obsługa mobilna
+    pl_PL: `BOLT12 Pay 0.3.20 — Interfejs w pięciu językach
 
-- Automatyczne otwieranie i odświeżanie Lightning Activity po udanych płatnościach.
-- Ponowne używanie adresów Lightning i BIP353, ofert BOLT12, celów LNURL-pay oraz kluczy publicznych Keysend z historii.
-- Resetowanie kwoty i notatki przed kolejną płatnością. Płatności nigdy nie są wysyłane automatycznie.
-- Wykluczenie jednorazowych faktur BOLT11 i identyfikatorów technicznych.
-- Zapobieganie niepotrzebnemu otwieraniu klawiatury Androida po wstawieniu danych z kontaktów, schowka, linków lub historii.
-- Zamykanie klawiatury po płatności i ulepszony wybór kontaktów.
-- Zachowanie responsywności interfejsu podczas rozwiązywania BIP353 i przekroczenia czasu oczekiwania LNDK.
+- Pełny interfejs w języku angielskim, niemieckim, hiszpańskim, francuskim i polskim.
+- Tłumaczenia Pay, Console, konfiguracji, logowania, stron publicznych i aliasów.
+- Zmiana języka bez utraty wpisanych danych ani kontekstu płatności.
+- Android Companion v1.0.1 z niezależnym wyborem języka aplikacji.
+- Poprawka początkowego kodu QR Pay: skonfigurowany adres lub aktywna oferta.
+- Lepsza edycja i kopiowanie danych płatności na urządzeniach mobilnych.
+- Udoskonalony wybór języka i numer wersji na stronie Pay.
 
-Ręczna migracja nie jest wymagana. Istniejące dane zostają zachowane. LNDK i Android Companion pozostają bez zmian.`,
+Ręczna migracja nie jest wymagana. Istniejące dane zostają zachowane. LNDK pozostaje bez zmian.`,
   },
 
   migrations: {
