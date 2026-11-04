@@ -3,7 +3,7 @@
 BOLT12 Pay is built locally from the [`Dockerfile`](./Dockerfile). The image has two upstream inputs:
 
 1. **The lndk-pay application** — the [`upstream/`](./upstream) git submodule ([Alex71btc/lndk-pay](https://github.com/Alex71btc/lndk-pay)). The image is built from its `app/` subdirectory.
-2. **The LNDK runtime** — pulled as a prebuilt image and pinned in the `Dockerfile`'s first stage (`FROM alex71btc/lndk:<tag> AS lndkstage`).
+2. **The LNDK runtime** — pulled as a prebuilt image and pinned by tag and digest in the `Dockerfile`'s first stage (`FROM alex71btc/lndk:<tag>@sha256:<digest> AS lndkstage`).
 
 ## Determining the upstream version
 
@@ -28,6 +28,9 @@ BOLT12 Pay is built locally from the [`Dockerfile`](./Dockerfile). The image has
   git add upstream
   ```
 
-- **LNDK** — set the `lndkstage` tag in the [`Dockerfile`](./Dockerfile) to the new `alex71btc/lndk:<tag>`.
+- **LNDK** — set the `lndkstage` image in the [`Dockerfile`](./Dockerfile) to `alex71btc/lndk:<tag>@sha256:<digest>`, taking the multi-arch index digest:
 
-Then bump `version` and `releaseNotes` in `startos/versions/`.
+  ```
+  docker buildx imagetools inspect alex71btc/lndk:<tag> --format '{{json .Manifest}}' | jq -r .digest
+  ```
+
