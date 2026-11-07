@@ -23,6 +23,7 @@
 - [File Models](#file-models)
 - [Dependencies](#dependencies)
 - [Network Access and Interfaces](#network-access-and-interfaces)
+- [Android Companion Notifications](#android-companion-notifications)
 - [Installation and First-Run Flow](#installation-and-first-run-flow)
 - [Actions](#actions)
 - [Tasks](#tasks)
@@ -103,6 +104,18 @@ Bound on the `main` MultiHost over HTTP and not masked. Once a primary URL is ch
 
 **Which address this is reached at is not cosmetic here.** LNURL and Lightning Address require a _publicly resolvable_ host, because the sender's wallet — not the user's browser — has to fetch the well-known endpoint. A Tor or `.local` address works fine for the operator and cannot be used by anyone paying them. That is what [Set Primary URL](#actions) exists to settle, and why it only offers non-local addresses.
 
+## Android Companion Notifications
+
+BOLT12 Pay 0.3.23 adds optional end-to-end encrypted incoming-payment notifications through the signed Android Companion 1.1.3. The feature uses the existing Web UI interface and adds no StartOS interface, port, daemon or dependency. No Google or Firebase service is embedded.
+
+StartOS uses the direct Companion pairing path. The browser-mediated pairing flow exists for Umbrel and is not needed here. Pairing still requires the Web UI to have a public HTTPS address that the Android device and the selected UnifiedPush distributor can reach.
+
+One-time pairing tokens expire after ten minutes and are stored only as hashes. After pairing, the device receives a separate random credential while the server stores only its hash. The VAPID private key uses the existing LND-bound encrypted secret store.
+
+Paired devices, push subscriptions and pending notification deliveries live with the application data on the `main` volume under `/data`. They survive service restarts and package upgrades and are included in the volume backup. Delivery uses bounded retries and duplicate protection; expired or invalid endpoints are disabled automatically.
+
+Private payment comments are optional and disabled in the Companion by default. Eligible comments are sanitized and bounded before encryption. Payment hashes, invoices, raw memos, counterparties, Nostr events and NWC connection data are not sent to Android. Secure lock screens receive only a generic incoming-payment notification.
+
 ## Installation and First-Run Flow
 
 There is no wizard, no credential, and no install task. The service starts, waits for LND, and serves its interface.
@@ -130,8 +143,8 @@ Chooses which of this service's non-local addresses to advertise as the LNURL an
 
 One, and it is raised by circumstance rather than at install.
 
-| Task            | Severity   | Raised when                                            | Cleared when    |
-| --------------- | ---------- | ------------------------------------------------------ | --------------- |
+| Task            | Severity   | Raised when                                            | Cleared when                                   |
+| --------------- | ---------- | ------------------------------------------------------ | ---------------------------------------------- |
 | Set Primary URL | `critical` | A previously chosen primary URL is no longer available | The action runs, or the chosen address returns |
 
 **It is never raised on a fresh install** — only when a URL that _was_ set has since disappeared, typically because a custom domain was removed. That is the case worth interrupting for: the address the package advertised no longer resolves, which fails silently for senders and is invisible from the operator's side.

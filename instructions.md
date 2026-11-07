@@ -57,6 +57,24 @@ The guide includes:
 - Cloudflare Zone configuration
 - common setup mistakes
 
+## Android payment notifications
+
+BOLT12 Pay 0.3.23 includes the signed Android Companion 1.1.3 and optional end-to-end encrypted incoming-payment notifications through UnifiedPush. No Google or Firebase service is built into the Companion.
+
+Before pairing:
+
+- Give the **Web UI** a public HTTPS address and use that address as the server URL in the Companion.
+- Install a UnifiedPush distributor app such as ntfy or Sunup on the Android device. An ntfy server by itself is not sufficient.
+
+To pair a device:
+
+1. Download and install the signed Companion offered by the BOLT12 Pay mobile page. An earlier debug build must be uninstalled once because it uses a different signing certificate.
+2. Enter the public HTTPS BOLT12 Pay address in the Companion.
+3. Open **Android payment notifications** in the authenticated Pay interface and create a pairing QR code or link.
+4. Complete the direct StartOS pairing, grant Android notification permission and select the UnifiedPush distributor.
+
+Paired devices can be revoked from BOLT12 Pay or the Companion. Private payment comments are optional and disabled by default. When enabled, supported comments are sanitized before display, while a secure lock screen receives only a generic incoming-payment notification.
+
 ## Using BOLT12 Pay
 
 The Web UI is the application itself — create offers, generate payment pages, and manage LNURL / Lightning Address settings. The upstream documentation applies once you're in.
