@@ -106,9 +106,9 @@ Bound on the `main` MultiHost over HTTP and not masked. Once a primary URL is ch
 
 ## Android Companion Notifications
 
-BOLT12 Pay 0.3.23 adds optional end-to-end encrypted incoming-payment notifications through the signed Android Companion 1.1.3. The feature uses the existing Web UI interface and adds no StartOS interface, port, daemon or dependency. No Google or Firebase service is embedded.
+BOLT12 Pay can send optional end-to-end encrypted incoming-payment notifications to its signed Android Companion. The feature uses the existing Web UI interface and adds no StartOS interface, port, daemon or dependency. No Google or Firebase service is embedded.
 
-StartOS uses the direct Companion pairing path. The browser-mediated pairing flow exists for Umbrel and is not needed here. Pairing still requires the Web UI to have a public HTTPS address that the Android device and the selected UnifiedPush distributor can reach.
+StartOS uses the direct Companion pairing path. Pairing requires the Web UI to have a public HTTPS address that the Android device and the selected UnifiedPush distributor can reach.
 
 One-time pairing tokens expire after ten minutes and are stored only as hashes. After pairing, the device receives a separate random credential while the server stores only its hash. The VAPID private key uses the existing LND-bound encrypted secret store.
 
