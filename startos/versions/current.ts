@@ -14,7 +14,7 @@ export const current = VersionInfo.of({
 - Public payment-target discovery for supported aliases.
 - Pairing in English, German, Spanish, French and Polish.
 
-Android notifications require a public HTTPS address and an installed UnifiedPush distributor. If you installed the Companion from BOLT12 Pay 0.3.20 or earlier, uninstall it before installing 1.1.3.`,
+Android notifications require a public HTTPS address and an installed UnifiedPush distributor. If Android reports a signing-certificate conflict when updating the Companion, uninstall the existing Companion before installing 1.1.3.`,
 
     de_DE: `BOLT12 Pay 0.3.23 — Verschlüsselte Android-Zahlungsbenachrichtigungen
 
@@ -26,7 +26,7 @@ Android notifications require a public HTTPS address and an installed UnifiedPus
 - Öffentliche Zahlungsziel-Erkennung für unterstützte Aliase.
 - Kopplung auf Deutsch, Englisch, Spanisch, Französisch und Polnisch.
 
-Für Android-Benachrichtigungen werden eine öffentliche HTTPS-Adresse und ein installierter UnifiedPush-Verteiler benötigt. Wer den Companion aus BOLT12 Pay 0.3.20 oder früher installiert hat, deinstalliert ihn vor der Installation von 1.1.3.`,
+Für Android-Benachrichtigungen werden eine öffentliche HTTPS-Adresse und ein installierter UnifiedPush-Verteiler benötigt. Wenn Android beim Aktualisieren des Companion einen Signaturzertifikatskonflikt meldet, deinstallieren Sie den vorhandenen Companion vor der Installation von 1.1.3.`,
 
     es_ES: `BOLT12 Pay 0.3.23 — Notificaciones de pagos cifradas en Android
 
@@ -38,7 +38,7 @@ Für Android-Benachrichtigungen werden eine öffentliche HTTPS-Adresse und ein i
 - Descubrimiento público de destinos de pago para alias compatibles.
 - Emparejamiento en inglés, alemán, español, francés y polaco.
 
-Las notificaciones de Android requieren una dirección HTTPS pública y un distribuidor UnifiedPush instalado. Si instaló el Companion desde BOLT12 Pay 0.3.20 o anterior, desinstálelo antes de instalar la 1.1.3.`,
+Las notificaciones de Android requieren una dirección HTTPS pública y un distribuidor UnifiedPush instalado. Si Android indica un conflicto de certificados de firma al actualizar el Companion, desinstale el Companion existente antes de instalar la versión 1.1.3.`,
 
     fr_FR: `BOLT12 Pay 0.3.23 — Notifications de paiement Android chiffrées
 
@@ -50,7 +50,7 @@ Las notificaciones de Android requieren una dirección HTTPS pública y un distr
 - Découverte publique des destinations de paiement pour les alias pris en charge.
 - Association en anglais, allemand, espagnol, français et polonais.
 
-Les notifications Android nécessitent une adresse HTTPS publique et un distributeur UnifiedPush installé. Si vous avez installé le Companion depuis BOLT12 Pay 0.3.20 ou antérieur, désinstallez-le avant d’installer la 1.1.3.`,
+Les notifications Android nécessitent une adresse HTTPS publique et un distributeur UnifiedPush installé. Si Android signale un conflit de certificats de signature lors de la mise à jour du Companion, désinstallez le Companion existant avant d’installer la version 1.1.3.`,
 
     pl_PL: `BOLT12 Pay 0.3.23 — Szyfrowane powiadomienia o płatnościach na Androidzie
 
@@ -62,7 +62,7 @@ Les notifications Android nécessitent une adresse HTTPS publique et un distribu
 - Publiczne wykrywanie celów płatności dla obsługiwanych aliasów.
 - Parowanie w języku angielskim, niemieckim, hiszpańskim, francuskim i polskim.
 
-Powiadomienia na Androidzie wymagają publicznego adresu HTTPS i zainstalowanego dystrybutora UnifiedPush. Jeśli Companion został zainstalowany z BOLT12 Pay 0.3.20 lub wcześniejszej wersji, odinstaluj go przed instalacją 1.1.3.`,
+Powiadomienia na Androidzie wymagają publicznego adresu HTTPS i zainstalowanego dystrybutora UnifiedPush. Jeśli Android zgłosi konflikt certyfikatów podpisu podczas aktualizacji Companiona, odinstaluj istniejącego Companiona przed instalacją wersji 1.1.3.`,
   },
 
   migrations: {

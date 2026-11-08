@@ -68,7 +68,7 @@ Before pairing:
 
 To pair a device:
 
-1. Download and install the signed Companion offered by the BOLT12 Pay mobile page. If you installed the Companion from BOLT12 Pay 0.3.20 or earlier, uninstall it first: it was signed with a different certificate.
+1. Download and install the signed Companion offered by the BOLT12 Pay mobile page.
 2. Enter the public HTTPS BOLT12 Pay address in the Companion.
 3. Open **Android payment notifications** in the authenticated Pay interface and create a pairing QR code or link.
 4. Complete the direct StartOS pairing, grant Android notification permission and select the UnifiedPush distributor.
