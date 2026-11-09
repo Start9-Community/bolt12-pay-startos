@@ -12,7 +12,7 @@
 
 ## Before you start
 
-BOLT12 offers require onion-message support on your LND node. BOLT12 Pay requires **LND 0.21.1 or newer**, which advertises onion messages natively, so there is nothing to configure on LND.
+BOLT12 offers require onion-message support on your LND node. BOLT12 Pay requires **LND 0.21.6-beta:3 or newer**, which advertises onion messages natively and shares the credentials this package needs, so there is nothing to configure on LND.
 
 ### Requirements for BOLT12 offers
 
@@ -23,8 +23,8 @@ Creating BOLT12 offers also requires:
 
 ## Getting set up
 
-1. Install and fully sync **LND** (0.21.1 or newer).
-2. Install **BOLT12 Pay** and start it. It connects to LND automatically over the internal network using the read-only credentials mounted from the LND package — no macaroon copying required.
+1. Install and fully sync **LND** (0.21.6-beta:3 or newer).
+2. Install **BOLT12 Pay** and start it. It connects to LND automatically over the internal network using the credentials LND shares with it, mounted read-only — no macaroon copying required.
 3. Open the **Web UI** interface.
 
 ## Public access (LNURL & Lightning Address)

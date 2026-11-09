@@ -54,11 +54,11 @@ One image, built here from the vendored upstream app plus the LNDK runtime it de
 
 Two volumes, and only one of them is mounted into the container.
 
-| Volume            | Mount Point | Purpose                                     |
-| ----------------- | ----------- | ------------------------------------------- |
-| `main`            | `/data`     | App configuration, secrets, and LNDK's data |
-| `startos`         | not mounted | Package state — the chosen primary URL      |
-| LND's `main` (ro) | `/mnt/lnd`  | LND's TLS certificate and admin macaroon    |
+| Volume              | Mount Point | Purpose                                                          |
+| ------------------- | ----------- | ---------------------------------------------------------------- |
+| `main`              | `/data`     | App configuration, secrets, and LNDK's data                      |
+| `startos`           | not mounted | Package state — the chosen primary URL                           |
+| LND's `public` (ro) | `/mnt/lnd`  | Only LND's `admin/` tier: its TLS certificate and admin macaroon |
 
 The split matters: `startos` holds a value the _package_ owns and the application must never see directly, so it is deliberately kept out of the container. What reaches the app is the derived environment, not the file.
 
@@ -82,9 +82,9 @@ Everything else the application configures, it configures itself, inside the web
 
 One, and it is required.
 
-| Dependency | Required | Health checks required | Mounted                         | Why                               |
-| ---------- | -------- | ---------------------- | ------------------------------- | --------------------------------- |
-| LND        | Yes      | `lnd`                  | `main`, read-only at `/mnt/lnd` | Creating and paying BOLT12 offers |
+| Dependency | Required | Health checks required | Mounted                                           | Why                               |
+| ---------- | -------- | ---------------------- | ------------------------------------------------- | --------------------------------- |
+| LND        | Yes      | `lnd`                  | `public` (`admin/` tier), read-only at `/mnt/lnd` | Creating and paying BOLT12 offers |
 
 The package reaches **both** of LND's interfaces over the internal bridge — REST and gRPC — and injects the resolved addresses into `start.sh`. The mounted certificate validates both legs, because it is a full chain ending in the server's root CA, which also signed what the REST proxy presents.
 
@@ -174,7 +174,7 @@ LND's credentials are not backed up here either — they belong to LND and are r
 1. **The primary URL is not backed up.** It lives on the `startos` volume, which is outside the backup, so it must be set again after a restore.
 2. **LNURL and Lightning Address need a publicly resolvable address.** Tor and `.local` cannot serve them, whatever is selected.
 3. **The package's URL settings are defaults only** — the application's own admin settings override them.
-4. **Mainnet only.** The macaroon path is pinned to Bitcoin mainnet.
+4. **Mainnet only.** LNDK is pinned to Bitcoin mainnet (`LNDK_NETWORK=bitcoin`).
 5. **LNDK is not health-checked.** Only the web interface is.
 6. **Upstream is vendored as a submodule**, so the packaged app is whatever commit that submodule points at rather than a published release.
 
@@ -203,7 +203,7 @@ startos_managed_env_vars:
   - PUBLIC_LNURL_ADDRESS
   - PUBLIC_BIP353_ADDRESS
 dependencies:
-  - lnd # required, kind: running, read-only mount at /mnt/lnd
+  - lnd # required, kind: running, read-only mount of its public admin/ tier at /mnt/lnd
 interfaces:
   ui: { type: ui, port: 8081 }
 actions:
