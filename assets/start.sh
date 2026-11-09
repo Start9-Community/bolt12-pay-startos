@@ -18,11 +18,11 @@ export PYTHONPATH=/app
 
 # LND is a required StartOS dependency, reached over the StartOS LXC bridge.
 # LND_REST_URL (REST) and LND_GRPC_ADDRESS (gRPC) are injected by the StartOS
-# service — its `lnd.startos` DNS name is gone. Its data directory (TLS cert +
-# macaroons) is mounted read-only at /mnt/lnd.
+# service — its `lnd.startos` DNS name is gone. LND's public admin/ tier (TLS
+# cert + admin macaroon) is mounted read-only at /mnt/lnd.
 export LND_DIR=/mnt/lnd
 export LND_TLS_CERT_PATH="$LND_DIR/tls.cert"
-export LND_MACAROON_PATH="$LND_DIR/data/chain/bitcoin/mainnet/admin.macaroon"
+export LND_MACAROON_PATH="$LND_DIR/admin.macaroon"
 export LND_REST_INSECURE=true
 
 export LNDK_CLI=/usr/local/bin/lndk-cli

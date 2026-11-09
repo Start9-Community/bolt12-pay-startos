@@ -24,7 +24,7 @@ Creating BOLT12 offers also requires:
 ## Getting set up
 
 1. Install and fully sync **LND** (0.21.1 or newer).
-2. Install **BOLT12 Pay** and start it. It connects to LND automatically over the internal network using the read-only credentials mounted from the LND package — no macaroon copying required.
+2. Install **BOLT12 Pay** and start it. It connects to LND automatically over the internal network using the credentials LND shares with it, mounted read-only — no macaroon copying required.
 3. Open the **Web UI** interface.
 
 ## Public access (LNURL & Lightning Address)
