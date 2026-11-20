@@ -10,7 +10,8 @@ export const taskUiPassword = sdk.setupOnInit(async (effects) => {
 
   // Upstream lets the first visitor set the password while none is stored, so one is always stored.
   if (await configJson.read((c) => c.ui_password_hash).once()) {
-    if (isSet === undefined) {
+    // Existing passwords survive missing package state on upgrades and restores.
+    if (isSet === undefined || isSet === null) {
       await storeJson.merge(effects, { uiPasswordSet: true })
       return
     }
